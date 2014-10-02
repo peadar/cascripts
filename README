@@ -1,4 +1,7 @@
-Some scripts to generate certs, keys and stuff with openssl
+It's a little mini OpenSSL CA!
+
+Scripts to generate certs, keys and stuff with OpenSSL.
 
 Here be dragons - these work, but were written before I really understood
-anything at all about X.509
+anything at all about X.509. They are basically my fumblings on the
+keyboard as I struggled to learn about SSL
