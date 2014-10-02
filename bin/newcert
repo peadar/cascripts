@@ -1,0 +1,21 @@
+#!/bin/sh
+. cautil
+
+name=$1
+newkey $name
+
+shift
+if [ $# -ne 0 ]
+then
+    CA=$1
+else
+    CA=CA
+fi
+
+# Make a certificate request.
+openssl req -new -key keys/$name.pem -out csrs/$name.csr
+
+signreq $CA $name
+
+openssl pkcs8 -topk8 -nocrypt -in keys/$name.pem -out pkcs8/$name.p8
+openssl pkcs12 -export -in certs/$name.pem -out p12s/$name.p12 -inkey keys/$name.pem

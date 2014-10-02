@@ -1,0 +1,18 @@
+#!/bin/sh
+set -x
+
+signer=$1
+name=$2
+if [ "$CERT_EXPIRE_DAYS" = "" ]; then
+    days=365
+else
+    days=$CERT_EXPIRE_DAYS
+fi
+
+if [ "$IS_CA" != "" ]; then
+    doca="-extfile /etc/ssl/openssl.cnf -extensions v3_ca"
+fi
+
+csr=csrs/$name.csr
+
+openssl x509 -req -days $days -in $csr -CAserial certs/$signer.srl -CAcreateserial -CA certs/$signer.pem -CAkey keys/$signer.pem -out certs/$name.pem $doca

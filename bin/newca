@@ -1,0 +1,35 @@
+#!/bin/sh
+# Generate a CA private key, and self-signed certificate.
+. cautil
+mkdir -p certs
+mkdir -p keys
+mkdir -p p12s
+mkdir -p csrs
+mkdir -p pkcs8
+
+# Generate RSA key
+
+while true
+do
+    printf "curve? (enter for list) "
+    read CURVE
+    if [ "$CURVE" != "" ]; then
+        echo $CURVE > CURVE
+        break
+    else
+        openssl ecparam -list_curves
+    fi
+done
+
+echo "Generating DSA parameters"
+openssl dsaparam `keysize` -out dsaparams
+
+newkey CA
+
+# Make a certificate signing request.
+openssl req -new -key keys/CA.pem -out csrs/CA.csr
+
+# Self-sign.
+openssl x509 -req -days 3650 -in csrs/CA.csr -signkey keys/CA.pem -out certs/CA.pem -extfile /etc/ssl/openssl.cnf -extensions v3_ca
+openssl pkcs8 -topk8 -nocrypt -in keys/CA.pem -out pkcs8/CA.p8
+openssl pkcs12 -export -in certs/CA.pem -out p12s/CA.p12 -inkey keys/CA.pem

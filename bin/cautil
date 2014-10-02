@@ -1,0 +1,12 @@
+keysize() {
+    while true
+    do
+        printf "Keysize? " 1>&2
+        read KEYSIZE
+        if [ "$KEYSIZE" != "" ]; then
+            echo $KEYSIZE
+            break
+        fi
+    done
+}
+

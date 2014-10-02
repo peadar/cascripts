@@ -1,0 +1,22 @@
+#!/bin/sh
+. cautil
+name=$1
+while true
+do
+    printf "Key type for $1? "
+    read KEYTYPE
+    if [ "$KEYTYPE" = "RSA" ] ; then
+        openssl genrsa -out keys/$name.pem `keysize`
+        break
+    elif [ "$KEYTYPE" = "DSA" ] ; then
+        openssl gendsa dsaparams -out keys/$name.pem
+        break
+    elif [ "$KEYTYPE" = "EC" ] ; then
+        openssl ecparam -genkey -name `cat CURVE` -out keys/$name.pem
+        break
+    else
+        echo "Pick one of RSA, DSA, EC"
+    fi
+done
+
+
