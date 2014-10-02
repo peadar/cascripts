@@ -1,0 +1,4 @@
+Some scripts to generate certs, keys and stuff with openssl
+
+Here be dragons - these work, but were written before I really understood
+anything at all about X.509
